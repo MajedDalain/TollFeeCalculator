@@ -9,3 +9,7 @@ global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
 global using System.Net.Http;
+global using TollFeeCalculator.Services.FeeCalculators;
+global using TollFeeCalculator.Services.PublicHolidayLoader;
+global using TollFeeCalculator.Services.TollFreeConditions;
+global using TollFeeCalculator.Utilities.JsonSerializer;

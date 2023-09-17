@@ -6,9 +6,9 @@ namespace TollFeeCalculator.Services
     public class TollCalculator
     {
         private const int MaxDailyFee = 60;  // Max fee for a day
-        private readonly DefaultTollFreeChecker _tollFreeChecker;
+        private readonly ITollFreeChecker _tollFreeChecker;
         private readonly IFeeCalculator _feeCalculator;
-        public TollCalculator(DefaultTollFreeChecker tollFreeChecker, IFeeCalculator feeCalculator)
+        public TollCalculator(ITollFreeChecker tollFreeChecker, IFeeCalculator feeCalculator)
         {
             _tollFreeChecker = tollFreeChecker ?? throw new ArgumentNullException(nameof(tollFreeChecker));
             _feeCalculator = feeCalculator ?? throw new ArgumentNullException(nameof(feeCalculator));
