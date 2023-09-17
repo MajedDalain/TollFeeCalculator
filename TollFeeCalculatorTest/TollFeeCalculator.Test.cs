@@ -3,10 +3,22 @@ namespace TollFeeCalculatorTest
     [TestClass]
     public class TollCalculatorTests
     {
-        [TestMethod]
-        public async Task TestTollFeeForRegularCar()
+
+        private static DefaultTollFreeChecker? tollFreeChecker;
+
+        [ClassInitialize]
+        public static async Task Init(TestContext context) // TestContext parameter is required by MSTest for ClassInitialize
         {
-            var tollCalculator = await TollCalculator.CreateAsync();
+            var publicHolidayLoader = new PublicHolidayLoader();
+            var publicHolidays = await publicHolidayLoader.LoadPublicHolidaysAsync();
+            tollFreeChecker = new TollFreeChecker(publicHolidays);
+
+        }
+
+        [TestMethod]
+        public void TestTollFeeForRegularCar()
+        {
+            var tollCalculator = new TollCalculator(tollFreeChecker);
             var dates = new List<DateTime>
             {
                 new DateTime(2023, 09, 12, 08, 10, 0),
@@ -20,10 +32,10 @@ namespace TollFeeCalculatorTest
         }
 
         [TestMethod]
-        public async Task TestTollFeeForTollFreeVehicle()
+        public void TestTollFeeForTollFreeVehicle()
         {
-            var tollCalculator = await TollCalculator.CreateAsync();
-            var dates = new List<DateTime>
+                var tollCalculator = new TollCalculator(tollFreeChecker);
+                var dates = new List<DateTime>
             {
                 new DateTime(2023, 09, 12, 08, 10, 0),
                 new DateTime(2023, 09, 12, 08, 15, 0),
@@ -36,9 +48,9 @@ namespace TollFeeCalculatorTest
         }
 
         [TestMethod]
-        public async Task TestTollFeeForWeekend()
+        public void TestTollFeeForWeekend()
         {
-            var tollCalculator = await TollCalculator.CreateAsync();
+            var tollCalculator = new TollCalculator(tollFreeChecker);
             var dates = new List<DateTime>
             {
                 new DateTime(2023, 09, 10, 08, 10, 0), // Sunday
@@ -50,10 +62,10 @@ namespace TollFeeCalculatorTest
         }
 
         [TestMethod]
-        public async Task TestTollFeeForDayBeforeHoliday()
+        public void TestTollFeeForDayBeforeHoliday()
         {
-            var tollCalculator = await TollCalculator.CreateAsync();
-            var dates = new List<DateTime>
+                var tollCalculator = new TollCalculator(tollFreeChecker);
+                var dates = new List<DateTime>
             {
                 new DateTime(2023, 06, 04, 08, 10, 0), // Thursday before Good friday in April
                 new DateTime(2023, 06, 04, 08, 30, 0), // Thursday before Good friday in April
@@ -65,13 +77,13 @@ namespace TollFeeCalculatorTest
         }
 
         [TestMethod]
-        public async Task TestTollFeeForMultipleTripsDifferentHours()
+        public void TestTollFeeForMultipleTripsDifferentHours()
         {
-            // Initialize tollCalculator with mocked public holidays or real API call
-            var tollCalculator = await TollCalculator.CreateAsync();
+                // Initialize tollCalculator with mocked public holidays or real API call
+                var tollCalculator = new TollCalculator(tollFreeChecker);
 
-            // Dates representing the times the car passed through the toll
-            var dates = new List<DateTime>
+                // Dates representing the times the car passed through the toll
+                var dates = new List<DateTime>
             {
                 new DateTime(2023, 09, 12, 06, 20, 0), // Fee should be 8
                 new DateTime(2023, 09, 12, 07, 40, 0), // Fee should be 18
