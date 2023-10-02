@@ -19,6 +19,7 @@ namespace TollFeeCalculator.Services.PublicHolidayLoader
             _apiUrl = apiUrl;
         }
 
+        // this can be improved to two methods, one for fetching and one for deserializing 
         public async Task<List<DateTime>> LoadPublicHolidaysAsync()
         {
             var PublicHolidays = new List<DateTime>();
@@ -29,7 +30,9 @@ namespace TollFeeCalculator.Services.PublicHolidayLoader
                 using var jsonStream = await response.Content.ReadAsStreamAsync();
                 var customPublicHolidays = _jsonSerializer.Deserialize<CustomPublicHoliday[]>(jsonStream);
                 if(customPublicHolidays != null)
-                    PublicHolidays = customPublicHolidays.Select(h => h.Date).ToList();
+                    PublicHolidays = customPublicHolidays.Select(h => h.Date).ToList();  
+                // maybe this is not needed! since it is used in TollFreeDate and converted into 
+                // a hashset which solves the problem of immediate execution of IEnumberable 
             }
 
             return PublicHolidays;

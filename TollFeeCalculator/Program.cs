@@ -1,4 +1,6 @@
 ﻿
+using TollFeeCalculator.Services.TollFreeChecker;
+
 namespace TollFeeCalculator
 {
     internal class Program
@@ -13,7 +15,7 @@ namespace TollFeeCalculator
             var publicHolidays = await publicHolidayLoader.LoadPublicHolidaysAsync();
 
             CalculateElectricVehicleFees(dateArray, publicHolidays);
-            CalculateVehicleAndDaysFees(dateArray, publicHolidays);
+            //CalculateVehicleAndDaysFees(dateArray, publicHolidays);
 
             Console.ReadLine();
         }
@@ -22,9 +24,15 @@ namespace TollFeeCalculator
         {
             return new[]
             {
-                new DateTime(2023, 09, 12, 08, 10, 0),
-                new DateTime(2023, 09, 12, 08, 15, 0),
-                new DateTime(2023, 09, 12, 08, 17, 0),
+                new DateTime(2023, 09, 12, 06, 00, 0),
+                new DateTime(2023, 09, 12, 07, 20, 0),
+                new DateTime(2023, 09, 12, 07, 40, 0),
+                new DateTime(2023, 09, 12, 07, 50, 0),
+                new DateTime(2023, 09, 12, 08, 28, 0),
+                new DateTime(2023, 09, 12, 10, 15, 0),
+                //new DateTime(2023, 09, 12, 17, 17, 0),
+                //new DateTime(2023, 09, 12, 18, 17, 0),
+                //new DateTime(2023, 09, 12, 20, 17, 0),
             };
         }
 
@@ -36,16 +44,20 @@ namespace TollFeeCalculator
             return new SwedenPublicHolidayLoader(httpClient, jsonSerializer, apiUrl);
         }
 
+        // this will calculate fees for electrical vehicles based on different rules (different fees),
+        // taking in consideration only Date of passing the Toll, regardless of type of vehicle
         private static void CalculateElectricVehicleFees(DateTime[] dateArray, List<DateTime> publicHolidays)
         {
             var tollFreeChecker = CreateTollFreeCheckerForDays(publicHolidays);
-            var tollCalculator = new TollCalculator(tollFreeChecker, new ElectricVehicleFeeCalculator());
+            var tollCalculator = new TollCalculator(tollFreeChecker, new DefaultFeeCalculator());
             var totalFee = tollCalculator.GetTollFee(new ElectricVehicle(), dateArray);
 
             Console.WriteLine($"The total fee for the day is: {totalFee}");
             Console.WriteLine($"-------------------------------------------------------");
         }
 
+        // this will calculate fees for regular vehicles based on different rules/feed
+        // taking in consideratin the type of the vehicle and the date of passing the Toll 
         private static void CalculateVehicleAndDaysFees(DateTime[] dateArray, List<DateTime> publicHolidays)
         {
             var tollFreeChecker = CreateTollFreeCheckerForVehicleAndDays(publicHolidays);

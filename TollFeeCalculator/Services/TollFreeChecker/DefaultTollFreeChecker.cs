@@ -1,13 +1,9 @@
-﻿using TollFeeCalculator.Services.TollFreeConditions;
+﻿using TollFeeCalculator.Services.TollFreeChecker;
+using TollFeeCalculator.Services.TollFreeConditions;
 
 namespace TollFeeCalculator.Services
 {
-    public interface ITollFreeChecker
-    {
-        bool IsTollFree(Vehicle vehicle, DateTime date);
-    }
-
-
+   
     public class DefaultTollFreeChecker: ITollFreeChecker
     {
  

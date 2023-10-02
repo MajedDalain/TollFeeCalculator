@@ -1,4 +1,5 @@
 ﻿using TollFeeCalculator.Services.FeeCalculators;
+using TollFeeCalculator.Services.TollFreeChecker;
 
 namespace TollFeeCalculator.Services
 {
@@ -17,10 +18,15 @@ namespace TollFeeCalculator.Services
         {
             return IsTollFree(vehicle, dates) ? 0 : CalculateTollFee(dates);
         }
+
+        // in case we want to refactor more, we can add this logic to another class that only checks for IsAnyDateTollFree
         private bool IsTollFree(Vehicle vehicle, DateTime[] dates)
         {
             return  dates.Any(date => _tollFreeChecker.IsTollFree(vehicle,date));
         }
+
+
+        // also if we want to refactor more, we can split these 3 methods into another class that handles the calculation logic 
         private int CalculateTollFee(DateTime[] dates)
         {
             DateTime currentIntervalStart = dates[0]; 

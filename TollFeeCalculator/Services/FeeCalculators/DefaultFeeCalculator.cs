@@ -1,4 +1,6 @@
-﻿namespace TollFeeCalculator.Services.FeeCalculators
+﻿using TollFeeCalculator.Utilities.TollFeeInterval;
+
+namespace TollFeeCalculator.Services.FeeCalculators
 {
     public class DefaultFeeCalculator : IFeeCalculator
     {
@@ -22,7 +24,8 @@
 
         private int CalculateFeeBasedOnTime(int hour, int minute)
         {
-            // Determine fee based on time
+
+            //Determine fee based on time
             return hour switch
             {
                 6 when minute < 30 => _lowFee,
@@ -36,6 +39,11 @@
                 18 when minute < 30 => _lowFee,
                 _ => _noFee
             };
+
+
+
+            //return FeeService.GetFeeForTime(hour, minute);
+
         }
     }
 

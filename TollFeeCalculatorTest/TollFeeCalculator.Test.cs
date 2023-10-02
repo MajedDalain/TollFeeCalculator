@@ -1,6 +1,7 @@
 using Moq;
 using TollFeeCalculator.Services.FeeCalculators;
 using TollFeeCalculator.Services.PublicHolidayLoader;
+using TollFeeCalculator.Services.TollFreeChecker;
 using TollFeeCalculator.Services.TollFreeConditions;
 
 namespace TollFeeCalculatorTest

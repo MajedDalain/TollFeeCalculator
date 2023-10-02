@@ -17,6 +17,7 @@ namespace TollFeeCalculator.Services.TollFreeConditions
             _tollFreeMonths = new HashSet<int>(tollFreeMonths);
         }
 
+        // need to refactor since vehicle is not used here!
         public bool IsTollFree(Vehicle vehicle, DateTime date)
         {
             return _tollFreeDaysOfWeek.Contains(date.DayOfWeek) ||

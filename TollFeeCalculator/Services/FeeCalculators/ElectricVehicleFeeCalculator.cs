@@ -20,6 +20,8 @@
 
         }
 
+        // this can be moved to its own class and use a strategy pattern so that we can change the logic without changing the code inside the method 
+       
         private int CalculateFeeBasedOnTime(int hour, int minute)
         {
             return hour switch
